@@ -1,4 +1,9 @@
-## 10.3.1 (2027-04-20)
+## 10.3.2 (2026-05-05)
+
+### Bugfixes
+- Validate the language ID passed is a valid ISO language ID (e.g. en-GB) before saving translations.
+
+## 10.3.1 (2026-04-20)
 
 - Rename useGridEditorSave to useGridEditorServices to better match intent (e.g. save and delete)
 - Define hasDeletePermission, hasInsertPermission etc. also in EntityGrid
@@ -8,19 +13,19 @@
 - Use hasDeletePermission method from the grid if available, or use hasDeletePermission option of GridEditController if specified (StartSharp)
 - Add isReadOnly option to GridEditController, if not specified check grid's get_readOnly method / readOnly property (StartSharp)
 
-## 10.3.0 (2027-04-14)
+## 10.3.0 (2026-04-14)
 
 - Set grid's options.editorLock to a new one if default options editorLock is set to null. This allows setting gridDefaults.editorLock to null to automatically create a new one when required. Using GlobalEditorLock may cause some issues between editable grids in different unrelated dialogs.
 - Add tabbable option (default true) to columns which controls navigation via tab key. If a column is focusable: false, this property has no effect.
 - New TabbableAttribute that sets tabbable option for columns.
 - Rename SelectableAttribute to ShowSelectionAttribute to better identify intent and usage in SleekGrid, as it only controls if "selected" css class should be applied to cells, not selectability of a cell.
 
-## 10.2.9 (2027-04-14)
+## 10.2.9 (2026-04-14)
 
 ### Bugfixes
 - Null reference issue when grid inline editor's inplace add button is clicked and another inplace editor grid is opened
 
-## 10.2.8 (2027-04-14)
+## 10.2.8 (2026-04-14)
 
 ### Features
 - Add Focusable(false), Selectable(false) to RowEditActionsColumnAttribute
@@ -28,7 +33,7 @@
 - Add origin argument to IPropertyInfo.GetAttribute and IPropertyInfo.GetAttributes method to selectively exclude inherited, intrinsic, based on field attributes.
 - Make ReflectedType available through IPropertySource so that IPropertySource.Property does not need to be used and might be removed in the future to allow dynamic/mock props.
 
-## 10.2.7 (2027-04-13)
+## 10.2.7 (2026-04-13)
 
 ### Features
 - Add SelectableAttribute and FocusableAttribute and use them in setting grid columns corresponding props.
