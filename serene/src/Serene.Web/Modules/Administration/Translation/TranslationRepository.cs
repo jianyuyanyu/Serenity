@@ -7,17 +7,39 @@ using System.Reflection;
 
 namespace Serene.Administration.Repositories;
 
-public class TranslationRepository(IRequestContext context, IWebHostEnvironment hostEnvironment,
+public partial class TranslationRepository(IRequestContext context, IWebHostEnvironment hostEnvironment,
     ILocalTextRegistry localTextRegistry, ITypeSource typeSource) : BaseRepository(context)
 {
     protected IWebHostEnvironment HostEnvironment { get; } = hostEnvironment;
     protected ILocalTextRegistry LocalTextRegistry { get; } = localTextRegistry;
     protected ITypeSource TypeSource { get; } = typeSource;
 
+
+    [GeneratedRegex("^[a-z][a-z](-[A-Z][A-Z])?$")]
+    private static partial Regex IsoLanguageIdRegexGen();
+
+    private static readonly Regex IsoLanguageIdRegex = IsoLanguageIdRegexGen();
+
+    private static string NormalizeLanguageID(string languageID)
+    {
+        languageID = languageID.TrimToNull();
+        if (languageID == null)
+            return "";
+
+        if (!IsoLanguageIdRegex.IsMatch(languageID))
+            throw new ArgumentException("Invalid language ID format: " + languageID, nameof(languageID));
+
+        return languageID;
+    }
+
     public static string GetUserTextsFilePath(IWebHostEnvironment hostEnvironment, string languageID)
     {
+        languageID = NormalizeLanguageID(languageID);
+        if (string.IsNullOrEmpty(languageID))
+            languageID = "invariant";
+
         return Path.Combine(hostEnvironment.ContentRootPath, "App_Data", "texts",
-            "user.texts." + (languageID.TrimToNull() ?? "invariant") + ".json");
+            "user.texts." + languageID + ".json");
     }
 
     public ListResponse<TranslationItem> List(TranslationListRequest request)

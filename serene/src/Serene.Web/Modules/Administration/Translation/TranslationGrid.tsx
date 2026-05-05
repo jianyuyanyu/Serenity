@@ -179,6 +179,7 @@ export class TranslationGrid extends EntityGrid<TranslationItem, any> {
         if (!super.onViewSubmit())
             return false;
         this.hasChanges = false;
+        return true;
     }
 
     protected override getButtons(): ToolButton[] {
