@@ -3,8 +3,9 @@ namespace Serenity.TypeScript;
 public class Identifier : PrimaryExpressionBase, IDeclaration, IJsxTagNameExpression,
     IEntityName, IPropertyName, IBindingName, IJsxAttributeName, IHasLiteralText, IModuleName, IModuleExportName
 {
-    public Identifier(string text, SyntaxKind? originalKeywordKind = null, bool? hasExtendedUnicodeEscape = null)
-        : base(SyntaxKind.Identifier)
+    public Identifier(string text, SyntaxKind? originalKeywordKind = null, bool? hasExtendedUnicodeEscape = null,
+        SyntaxKind kind = SyntaxKind.Identifier)
+        : base(kind)
     {
         if (originalKeywordKind == null && !string.IsNullOrEmpty(text))
             originalKeywordKind = Scanner.StringToToken(text);

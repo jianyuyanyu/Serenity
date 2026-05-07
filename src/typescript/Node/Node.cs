@@ -1,20 +1,10 @@
 namespace Serenity.TypeScript;
 
-public class Node : TextRange, INode
+public class Node(SyntaxKind kind) : TextRange, INode
 {
-    public Node()
-    {
-    }
-
-    public Node(SyntaxKind kind)
-    {
-        Kind = kind;
-    }
-
-    public SyntaxKind Kind { get; set; }
+    public SyntaxKind Kind { get; set; } = kind;
     public NodeFlags Flags { get; set; }
     public INode Parent { get; set; }
-
 
     public override string ToString()
     {

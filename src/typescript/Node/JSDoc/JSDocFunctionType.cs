@@ -1,16 +1,10 @@
 namespace Serenity.TypeScript;
 
-public class JSDocFunctionType : Node, IJSDocType, ISignatureDeclaration, IHasNameProperty, IGetRestChildren
+public class JSDocFunctionType(NodeArray<ParameterDeclaration> parameters, ITypeNode type) 
+    : Node(SyntaxKind.JSDocFunctionType), IJSDocType, ISignatureDeclaration, IHasNameProperty, IGetRestChildren
 {
-    public JSDocFunctionType(NodeArray<ParameterDeclaration> parameters, ITypeNode type)
-    {
-        Kind = SyntaxKind.JSDocFunctionType;
-        Parameters = parameters;
-        Type = type;
-    }
-
-    public NodeArray<ParameterDeclaration> Parameters { get; set; }
-    public ITypeNode Type { get; set; }
+    public NodeArray<ParameterDeclaration> Parameters { get; set; } = parameters;
+    public ITypeNode Type { get; set; } = type;
     public IDeclarationName Name { get; set; }
     public NodeArray<TypeParameterDeclaration> TypeParameters { get; set; }
 

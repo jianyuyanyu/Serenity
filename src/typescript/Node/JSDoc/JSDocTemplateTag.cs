@@ -1,12 +1,7 @@
 namespace Serenity.TypeScript;
 
-public class JSDocTemplateTag : JSDocTag, IDeclarationWithTypeParameterChildren
+public class JSDocTemplateTag() : JSDocTag(SyntaxKind.JSDocTemplateTag), IDeclarationWithTypeParameterChildren
 {
-    public JSDocTemplateTag()
-    {
-        Kind = SyntaxKind.JSDocTemplateTag;
-    }
-
     public NodeArray<TypeParameterDeclaration> TypeParameters { get; set; }
 
 }

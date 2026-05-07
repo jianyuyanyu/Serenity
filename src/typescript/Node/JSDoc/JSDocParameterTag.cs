@@ -1,12 +1,7 @@
 namespace Serenity.TypeScript;
 
-public class JSDocParameterTag : JSDocTag, IGetRestChildren
+public class JSDocParameterTag() : JSDocTag(SyntaxKind.JSDocParameterTag), IGetRestChildren
 {
-    public JSDocParameterTag()
-    {
-        Kind = SyntaxKind.JSDocParameterTag;
-    }
-
     public Identifier PreParameterName { get; set; }
     public JSDocTypeExpression TypeExpression { get; set; }
     public Identifier PostParameterName { get; set; }

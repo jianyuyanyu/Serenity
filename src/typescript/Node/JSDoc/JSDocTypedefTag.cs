@@ -1,12 +1,7 @@
 namespace Serenity.TypeScript;
 
-public class JSDocTypedefTag : Node, IJSDocTag, IHasNameProperty, IGetRestChildren, IDeclarationWithTypeParameters
+public class JSDocTypedefTag() : Node(SyntaxKind.JSDocTypedefTag), IJSDocTag, IHasNameProperty, IGetRestChildren, IDeclarationWithTypeParameters
 {
-    public JSDocTypedefTag()
-    {
-        Kind = SyntaxKind.JSDocTypedefTag;
-    }
-
     public INode FullName { get; set; } // JSDocNamespaceDeclaration | Identifier
     public JSDocTypeExpression TypeExpression { get; set; }
     public JSDocTypeLiteral JSDocTypeLiteral { get; set; }

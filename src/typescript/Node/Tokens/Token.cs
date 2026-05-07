@@ -1,9 +1,5 @@
 namespace Serenity.TypeScript;
 
-public class Token : Node
+public class Token(SyntaxKind kind) : Node(kind)
 {
-    public Token(SyntaxKind kind)
-    {
-        Kind = kind;
-    }
 }

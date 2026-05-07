@@ -1,12 +1,7 @@
 namespace Serenity.TypeScript;
 
-public class JSDocTypeExpression : Node, IGetRestChildren
+public class JSDocTypeExpression() : Node(SyntaxKind.JSDocTypeExpression), IGetRestChildren
 {
-    public JSDocTypeExpression()
-    {
-        Kind = SyntaxKind.JSDocTypeExpression;
-    }
-
     public ITypeNode Type { get; set; }
 
     public IEnumerable<INode> GetRestChildren()

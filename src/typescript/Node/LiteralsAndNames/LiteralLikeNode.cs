@@ -4,9 +4,8 @@ namespace Serenity.TypeScript;
 public class LiteralLikeNode 
     : Node, ILiteralLikeNode, IHasLiteralText
 {
-    internal LiteralLikeNode(SyntaxKind kind, string text)
+    internal LiteralLikeNode(SyntaxKind kind, string text) : base(kind)
     {
-        Kind = kind;
         Text = text;
     }
 

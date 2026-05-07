@@ -1,6 +1,6 @@
 namespace Serenity.TypeScript;
 
-public class JSDoc : Node, IGetRestChildren
+public class JSDoc() : Node(SyntaxKind.JSDoc), IGetRestChildren
 {
     public NodeArray<IJSDocTag> Tags { get; set; }
     public string Comment { get; set; }

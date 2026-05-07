@@ -1,12 +1,7 @@
 namespace Serenity.TypeScript;
 
-public class JSDocTag : Node, IJSDocTag, IGetRestChildren
+public class JSDocTag(SyntaxKind kind = SyntaxKind.JSDocTag) : Node(kind), IJSDocTag, IGetRestChildren
 {
-    public JSDocTag()
-    {
-        Kind = SyntaxKind.JSDocTag;
-    }
-
     public AtToken AtToken { get; set; }
     public Identifier TagName { get; set; }
     public string Comment { get; set; }

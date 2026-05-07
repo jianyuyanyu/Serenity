@@ -1,12 +1,7 @@
 namespace Serenity.TypeScript;
 
-public class JSDocReturnTag : JSDocTag, IGetRestChildren
+public class JSDocReturnTag() : JSDocTag(SyntaxKind.JSDocReturnTag), IGetRestChildren
 {
-    public JSDocReturnTag()
-    {
-        Kind = SyntaxKind.JSDocReturnTag;
-    }
-
     public JSDocTypeExpression TypeExpression { get; set; }
 
     public override IEnumerable<INode> GetRestChildren()
