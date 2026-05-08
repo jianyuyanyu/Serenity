@@ -29,5 +29,5 @@ catalogs:
     "preact": "10.29.1"
     "tinyglobby": "0.2.16"
     "typescript": "6.0.3"
-    "vite": "8.0.10"
+    "vite": "8.0.11"
     "vitest": "4.1.5"
