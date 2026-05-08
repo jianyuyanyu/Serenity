@@ -1099,6 +1099,9 @@ export class SleekGrid<TItem = any> implements ISleekGrid<TItem> {
         this._styleNode?.remove();
         this._styleNode = null;
         this._stylesheet = null;
+        this._cssColRulesL = null;
+        this._cssColRulesR = null;
+        this._cssVarRules = null;
     }
 
     private createCssRules() {
