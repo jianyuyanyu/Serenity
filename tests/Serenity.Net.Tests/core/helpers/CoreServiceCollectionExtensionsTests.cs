@@ -73,6 +73,28 @@ public class CoreServiceCollectionExtensionsTests
     }
 
     [Fact]
+    public void RegisterSingleton_AsSelf_NoInterfaces_Throws()
+    {
+        var collection = new ServiceCollection();
+        Assert.Throws<InvalidProgramException>(() =>
+            collection.AddAutoRegisteredServices(new MockTypeSource(typeof(TestRegSingletonAsSelfNoInterface))));
+    }
+
+    [Fact]
+    public void RegisterSingleton_AsSelf_MultipleInterfaces_NoNameMatch_Throws()
+    {
+        var collection = new ServiceCollection();
+        Assert.Throws<InvalidProgramException>(() =>
+            collection.AddAutoRegisteredServices(new MockTypeSource(typeof(TestRegSingletonAsSelfMultipleIntfs))));
+    }
+
+    [RegisterSingleton(AsSelf = true)]
+    class TestRegSingletonAsSelfNoInterface { }
+
+    [RegisterSingleton(AsSelf = true)]
+    class TestRegSingletonAsSelfMultipleIntfs : ITestService1, ITestService2 { }
+
+    [Fact]
     public void RegisterScoped_RegistersTheInterface_AsScoped()
     {
         var collection = new ServiceCollection();

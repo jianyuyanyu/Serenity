@@ -45,9 +45,9 @@ public abstract class RegisterServiceAttribute : Attribute
 
     /// <summary>
     /// Register the type itself as concrete implementation for itself in addition to
-    /// any <see cref="Types" /> specified, or the type's interfaces if Types is null.
-    /// To only register itself, pass [] as Types. Note that AsSelf cannot be
-    /// used with keyed service registrations and Key property will be ignored.
+    /// any <see cref="Types" /> specified, or the type's auto-detected interface.
+    /// To register only itself with no interfaces, pass an empty array as Types: <c>[]</c>.
+    /// Note that AsSelf cannot be used with keyed service registrations and Key property will be ignored.
     /// </summary>
     public bool AsSelf { get; set; }
 
