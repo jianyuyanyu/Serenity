@@ -35,7 +35,7 @@ public class MockTypeSource : ITypeSource
 
     public IEnumerable<Type> GetTypesWithAttribute(Type attributeType)
     {
-        return types.Where(x => x.GetCustomAttribute(attributeType) != null);
+        return types.Where(x => x.GetCustomAttributes(attributeType).Any());
     }
 
     public IEnumerable<Type> GetTypesWithInterface(Type interfaceType)

@@ -221,4 +221,134 @@ public static class CoreServiceCollectionExtensions
                     ActivatorUtilities.CreateInstance<TImplementation>(services))));
     }
 
+    /// <summary>
+    /// Registers all the types with an RegisterService attribute 
+    /// (RegisterSingleton, RegisterScoped, RegisterTransient etc.)
+    /// from the type source in the service collection if available, 
+    /// or using the provided typeSource, optionally filtering implementation types
+    /// via a provided predicate. Use this at the end of InitializeServices in Startup.cs
+    /// so that services can be overridden before others.
+    /// </summary>
+    /// <param name="collection">Service collection</param>
+    /// <param name="typeSource">Type source. Should be provided if it is not already
+    /// registered in the service collection. Pass an empty type source
+    /// if you want to disable auto registrations.</param>
+    /// <param name="predicate">Predicate to filter implementation types to register.
+    /// The first argument is registration type (the interface or the implementation type itself),
+    /// and the second argument is the implementation type (e.g. the concrete type), 
+    /// and third argument is the registration attribute.</param>
+    /// <exception cref="ArgumentNullException">collection is null or typeSource can't be found in the collection</exception>
+    public static IServiceCollection AddAutoRegisteredServices(this IServiceCollection? collection,
+        ITypeSource? typeSource = null, Func<Type, Type, RegisterServiceAttribute, bool>? predicate = null)
+    {
+        if (collection is null)
+            throw new ArgumentNullException(nameof(collection));
+
+        typeSource ??= collection.FirstOrDefault(x => x.ServiceType == typeof(ITypeSource))?.ImplementationInstance as ITypeSource;
+        if (typeSource is null)
+            throw new ArgumentNullException(nameof(typeSource));
+
+        var servicesToAdd = new Dictionary<(Type serviceType, string? key), List<(Type implType, RegisterServiceAttribute attr)>>();
+
+        void enqueue(Type serviceType, Type implementationType, RegisterServiceAttribute attr)
+        {
+            if (predicate != null &&
+                !predicate(serviceType, implementationType, attr))
+                return;
+
+            var dictKey = (serviceType, attr.Key);
+            if (!servicesToAdd.TryGetValue(dictKey, out var list))
+                servicesToAdd[dictKey] = list = [];
+            
+            if (list.Any(x => x.implType == implementationType && x.attr == attr))
+                return;
+            
+            list.Add((implementationType, attr));
+        }
+
+        foreach (var impl in typeSource.GetTypes())
+        {
+            if (impl.IsAbstract || 
+                impl.IsInterface || 
+                impl.IsGenericType)
+                continue;
+
+            var attrs = impl.GetCustomAttributes<RegisterServiceAttribute>(inherit: false);
+            if (!attrs.Any())
+                continue;
+
+            foreach (var attr in attrs)
+            {
+                if (attr.AsSelf)
+                    enqueue(impl, impl, attr);
+
+                if (attr.Types != null)
+                {
+                    foreach (var t in attr.Types)
+                    {
+                        if (!t.IsAssignableFrom(impl))
+                            throw new InvalidOperationException($"{impl.FullName} type has [{attr.GetType().Name}] but " +
+                                $"the interface type specified ({t.FullName}) is not assignable from the implementation type! " +
+                                $"Please check the attribute configuration.");
+
+                        enqueue(t, impl, attr);
+                    }
+
+                    continue;
+                }
+
+                var intfs = impl.GetInterfaces().Where(x =>
+                    x != typeof(IDisposable) &&
+                    !typeof(IRequestHandler).IsAssignableFrom(x) &&
+                    (string.IsNullOrEmpty(x.Namespace) ||
+                     !x.Namespace.StartsWith("System.", StringComparison.Ordinal) &&
+                     !x.Namespace.StartsWith("Microsoft.", StringComparison.Ordinal)))
+                    .ToArray();
+
+                if (!intfs.Any())
+                    throw new InvalidProgramException($"{impl.FullName} type has [{attr.GetType().Name}] but " +
+                        $"no suitable interfaces found! Please specify the interface types explicitly on attribute constructor.");
+
+                if (intfs.Length > 1)
+                {
+                    var nameMatch = intfs.SingleOrDefault(x => x.Name == "I" + impl.Name);
+                    if (nameMatch != null)
+                    {
+                        enqueue(nameMatch, impl, attr);
+                        continue;
+                    }
+
+                    throw new InvalidProgramException($"{impl.FullName} type has [{attr.GetType().Name}] but " +
+                        $"multiple suitable interfaces found and none matches the 'I{{ClassName}}' convention! Please specify the interface types explicitly on attribute constructor.");
+                }
+
+                enqueue(intfs[0], impl, attr);
+            }
+        }
+
+        foreach (var pair in servicesToAdd)
+        {
+            var serviceType = pair.Key.serviceType;
+            var serviceKey = pair.Key.key;
+
+            foreach (var (implType, attr) in pair.Value.OrderBy(x => x.attr.Order))
+            {
+                var descriptor = new ServiceDescriptor(serviceType,
+                    implType != serviceType ? serviceKey : null, implType, attr.Lifetime);
+
+                if (attr.SkipExisting)
+                {
+                    collection.TryAdd(descriptor);
+                }
+                else
+                {
+                    collection.Add(descriptor);
+                }
+            }
+        }
+
+        return collection;
+    }
+
+
 }

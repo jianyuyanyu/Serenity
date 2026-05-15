@@ -1,20 +1,5 @@
-﻿
+
 namespace Serenity.Services;
-
-/// <summary>
-/// Marker interface for standard and custom request handlers
-/// </summary>
-public interface IRequestHandler
-{
-}
-
-/// <summary>
-/// Marker interface for request handlers that operate on a specific entity type.
-/// </summary>
-/// <typeparam name="TRow">The entity type</typeparam>
-public interface IRequestHandler<TRow> : IRequestHandler
-{
-}
 
 /// <summary>
 /// Marker interface for request handlers that operate on a specific entity type,

@@ -66,7 +66,7 @@ public abstract class BaseAssemblyTypeSource(IFeatureToggles? featureToggles = n
     /// <returns>Types with that attribute type</returns>
     public virtual IEnumerable<Type> GetTypesWithAttribute(Type attributeType)
     {
-        return GetTypes().Where(type => type.GetCustomAttribute(attributeType) != null);
+        return GetTypes().Where(type => type.GetCustomAttributes(attributeType).Any());
     }
 
     /// <inheritdoc/>
