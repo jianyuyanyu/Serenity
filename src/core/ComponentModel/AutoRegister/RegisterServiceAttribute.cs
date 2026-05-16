@@ -16,6 +16,12 @@ public abstract class RegisterServiceAttribute : Attribute
     }
 
     /// <summary>
+    /// Indicates whether to replace existing registration. Note that when ReplaceExisting is true,
+    /// SkipExisting is ignored.
+    /// </summary>
+    public bool ReplaceExisting { get; set; }
+
+    /// <summary>
     /// Gets or sets a value indicating whether to skip registration if a registration for the service
     /// already exists (default true), e.g. use TryAddSingleton etc. methods instead of AddSingleton.
     /// </summary>

@@ -336,7 +336,11 @@ public static class CoreServiceCollectionExtensions
                 var descriptor = new ServiceDescriptor(serviceType,
                     implType != serviceType ? serviceKey : null, implType, attr.Lifetime);
 
-                if (attr.SkipExisting)
+                if (attr.ReplaceExisting)
+                {
+                    collection.Replace(descriptor);
+                }
+                else if (attr.SkipExisting)
                 {
                     collection.TryAdd(descriptor);
                 }
