@@ -61,6 +61,11 @@ public class CoreServiceCollectionExtensionsTests
     {
     }
 
+    [RegisterSingleton(ReplaceExisting = true)]
+    class TestRegReplaceExisting : ITestService1
+    {
+    }
+
 
     [RegisterSingleton(AsSelf = true)]
     class TestRegSingletonAsSelf1 : ITestService1
@@ -406,4 +411,15 @@ public class CoreServiceCollectionExtensionsTests
 
     [RegisterSingleton(typeof(ITestService1)), RegisterSingleton(typeof(ITestService2))]
     class TestRegSingletonMultipleAttrs : ITestService1, ITestService2 { }
+
+    [Fact]
+    public void RegisterSingleton_ReplaceExisting_Replaces_Existing_Registration()
+    {
+        var collection = new ServiceCollection();
+        var userImpl = new TestRegSingleton_UserImpl();
+        collection.AddSingleton<ITestService1>(userImpl);
+        collection.AddAutoRegisteredServices(new MockTypeSource(typeof(TestRegReplaceExisting)));
+
+        Assert.IsType<TestRegReplaceExisting>(collection.BuildServiceProvider().GetService<ITestService1>());
+    }
 }
