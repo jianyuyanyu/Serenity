@@ -41,6 +41,6 @@
       <NuGetFilesToDelete Include="..\.nupkg\Serene.Templates*.nupkg" />
     </ItemGroup>
     <Delete Files="@(NuGetFilesToDelete)" />
-    <Exec Command="dotnet run --project build-serene.csproj --no-dependencies -- patchpackagejson" Condition="'$(SkipPatchPackageJson)' != 'true'" WorkingDirectory="..\..\build" />
+    <Exec Command="dotnet run --project build-serene.csproj --no-dependencies --no-launch-profile -- patchpackagejson" Condition="'$(SkipPatchPackageJson)' != 'true'" WorkingDirectory="..\..\build" />
   </Target>
 </Project>

@@ -1,6 +1,6 @@
 @echo off
 ECHO *** RUNNING COMMON-FEATURES BUILD ***
-dotnet run --project build\build-cf.csproj -- %*
+dotnet run --project build\build-cf.csproj --no-launch-profile -- %*
 if %ERRORLEVEL% GEQ 1 GOTO :end
 if "%~1"=="push" goto :propush
 

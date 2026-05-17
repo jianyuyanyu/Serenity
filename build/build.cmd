@@ -1,5 +1,5 @@
 @echo off
-dotnet run --project %~dp0\build.csproj -- %*%
+dotnet run --project %~dp0\build.csproj --no-launch-profile -- %*%
 if "%~1"=="push" goto :cfpush
 pause
 goto :eof

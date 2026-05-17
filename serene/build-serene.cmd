@@ -24,7 +24,7 @@ goto run_build
 
 :run_build
 echo *** RUNNING BUILD ***
-dotnet run --project build\build-serene.csproj --no-dependencies -- %*
+dotnet run --project build\build-serene.csproj --no-dependencies --no-launch-profile -- %*
 if %ERRORLEVEL% GEQ 1 GOTO :error
 goto build_nuget_package
 
